@@ -19,97 +19,33 @@ dependencies:
 RubyText(
   [
     RubyTextData(
-      'でいごの',
-    ),
-    RubyTextData(
-      '花',
+      '夏',
       ruby: 'はな',
     ),
     RubyTextData(
-      'が',
+      'でも',
     ),
     RubyTextData(
-      '咲',
-      ruby: 'さ',
+      '底',
+      ruby: 'そこ',
     ),
     RubyTextData(
-      'き',
+      'に',
     ),
     RubyTextData(
-      '、',
+      '冷',
+      ruby: 'つめ',
     ),
     RubyTextData(
-      '風',
-      ruby: 'かぜ',
+      'たさをもつ',
     ),
     RubyTextData(
-      'を',
+      '青',
+      ruby: 'あお',
     ),
     RubyTextData(
-      '呼',
-      ruby: 'よ',
-    ),
-    RubyTextData(
-      'び',
-    ),
-    RubyTextData(
-      '、',
-    ),
-    RubyTextData(
-      '嵐',
-      ruby: 'あらし',
-    ),
-    RubyTextData(
-      'が',
-    ),
-    RubyTextData(
-      '来',
-      ruby: 'き',
-    ),
-    RubyTextData(
-      'た',
-    ),
-    RubyTextData(
-      '呼',
-      ruby: 'よ',
-    ),
-    RubyTextData(
-      '、',
-    ),
-    RubyTextData(
-      'でいごが',
-    ),
-    RubyTextData(
-      '咲',
-      ruby: 'さ',
-    ),
-    RubyTextData(
-      'き',
-    ),
-    RubyTextData(
-      '乱',
-      ruby: 'みだ',
-    ),
-    RubyTextData(
-      'れ',
-    ),
-    RubyTextData(
-      '、',
-    ),
-    RubyTextData(
-      '嵐',
-      ruby: 'あらし',
-    ),
-    RubyTextData(
-      'が',
-    ),
-    RubyTextData(
-      '来',
-      ruby: 'き',
-    ),
-    RubyTextData(
-      'た。',
+      'いそら',
     ),
   ],
-),
+);
 ```
