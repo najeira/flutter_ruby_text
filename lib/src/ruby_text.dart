@@ -31,13 +31,11 @@ class RubyText extends StatelessWidget {
         TextSpan(
           children: [
             for (final cell in data)
-              WidgetSpan(
-                child: _RubySpan(
-                  cell.copyWith(
-                    style: style,
-                    rubyStyle: rubyStyle,
-                    textDirection: textDirection,
-                  ),
+              RubyTextSpan(
+                cell.copyWith(
+                  style: style,
+                  rubyStyle: rubyStyle,
+                  textDirection: textDirection,
                 ),
               ),
           ],
@@ -50,16 +48,22 @@ class RubyText extends StatelessWidget {
       );
 }
 
+class RubyTextSpan extends WidgetSpan {
+  RubyTextSpan(
+    RubyTextData data, {
+    super.alignment,
+    super.baseline,
+    super.style,
+  }) : super(child: _RubySpan(data));
+}
+
 class _RubySpan extends StatefulWidget {
-  const _RubySpan(
-    this.data, {
-    super.key,
-  });
+  const _RubySpan(this.data);
 
   final RubyTextData data;
 
   @override
-  _RubyState createState() => _RubyState();
+  State<_RubySpan> createState() => _RubyState();
 }
 
 class _RubyState extends State<_RubySpan> {
