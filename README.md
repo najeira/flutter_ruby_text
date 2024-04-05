@@ -20,7 +20,7 @@ RubyText(
   [
     RubyTextData(
       '夏',
-      ruby: 'はな',
+      ruby: 'なつ',
     ),
     RubyTextData(
       'でも',
