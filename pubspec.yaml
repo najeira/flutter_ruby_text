@@ -1,6 +1,6 @@
 name: ruby_text
 description: "A RubyText widget to achieve the furigana effect."
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/najeira/flutter_ruby_text
 
 environment:
