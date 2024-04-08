@@ -1,72 +1,43 @@
 import 'package:flutter/widgets.dart';
 
-import 'ruby_text_data.dart';
-
-class RubyText extends StatelessWidget {
-  const RubyText(
-    this.data, {
-    super.key,
-    this.spacing = 0.0,
-    this.style,
-    this.rubyStyle,
-    this.textAlign,
-    this.textDirection,
-    this.softWrap,
-    this.overflow,
-    this.maxLines,
-  });
-
-  final List<RubyTextData> data;
-  final double spacing;
-  final TextStyle? style;
-  final TextStyle? rubyStyle;
-  final TextAlign? textAlign;
-  final TextDirection? textDirection;
-  final bool? softWrap;
-  final TextOverflow? overflow;
-  final int? maxLines;
-
-  @override
-  Widget build(BuildContext context) => Text.rich(
-        TextSpan(
-          children: [
-            for (final cell in data)
-              if (cell.ruby?.isNotEmpty == true)
-                RubyTextSpan(
-                  cell.copyWith(
-                    style: style,
-                    rubyStyle: rubyStyle,
-                    textDirection: textDirection,
-                  ),
-                )
-              else
-                TextSpan(
-                  text: cell.text,
-                  style: style,
-                ),
-          ],
-        ),
-        textAlign: textAlign,
-        textDirection: textDirection,
-        softWrap: softWrap,
-        overflow: overflow,
-        maxLines: maxLines,
-      );
-}
-
 class RubyTextSpan extends WidgetSpan {
-  RubyTextSpan(
-    RubyTextData data, {
+  RubyTextSpan({
+    String? text,
+    String? ruby,
+    TextStyle? rubyStyle,
+    TextDirection? textDirection,
     super.alignment,
     super.baseline,
     super.style,
-  }) : super(child: _RubySpan(data));
+  }) : super(
+          child: _RubySpan(
+            text: text,
+            ruby: ruby,
+            style: style,
+            rubyStyle: rubyStyle,
+            textDirection: textDirection,
+          ),
+        );
 }
 
 class _RubySpan extends StatefulWidget {
-  const _RubySpan(this.data);
+  const _RubySpan({
+    this.text,
+    this.ruby,
+    this.style,
+    this.rubyStyle,
+    this.textDirection,
+  });
 
-  final RubyTextData data;
+  final String? text;
+
+  final String? ruby;
+
+  final TextStyle? style;
+
+  final TextStyle? rubyStyle;
+
+  final TextDirection? textDirection;
 
   @override
   State<_RubySpan> createState() => _RubyState();
@@ -79,7 +50,11 @@ class _RubyState extends State<_RubySpan> {
   @override
   void didUpdateWidget(_RubySpan oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.data != oldWidget.data) {
+    if (widget.text != oldWidget.text ||
+        widget.ruby != oldWidget.ruby ||
+        widget.style != oldWidget.style ||
+        widget.rubyStyle != oldWidget.rubyStyle ||
+        widget.textDirection != oldWidget.textDirection) {
       _calculate();
     }
   }
@@ -89,18 +64,16 @@ class _RubyState extends State<_RubySpan> {
     _calculateIfNeeded();
     return Column(
       children: [
-        if (widget.data.ruby != null)
+        if (widget.ruby?.isNotEmpty == true)
           Text(
-            widget.data.ruby!,
-            textAlign: TextAlign.center,
+            widget.ruby ?? "",
             style: _rubyTextStyle,
             textHeightBehavior: const TextHeightBehavior(
               applyHeightToLastDescent: false,
             ),
           ),
         Text(
-          widget.data.text,
-          textAlign: TextAlign.center,
+          widget.text ?? "",
           style: _textStyle,
         ),
       ],
@@ -121,33 +94,35 @@ class _RubyState extends State<_RubySpan> {
     final boldTextOverride = MediaQuery.boldTextOf(context);
 
     // text style
-    var effectiveTextStyle = widget.data.style;
+    var effectiveTextStyle = widget.style;
     if (effectiveTextStyle == null || effectiveTextStyle.inherit) {
       effectiveTextStyle = defaultTextStyle.merge(effectiveTextStyle);
     }
     if (boldTextOverride) {
-      effectiveTextStyle = effectiveTextStyle
-          .merge(const TextStyle(fontWeight: FontWeight.bold));
+      effectiveTextStyle = effectiveTextStyle.copyWith(
+        fontWeight: FontWeight.bold,
+      );
     }
     assert(effectiveTextStyle.fontSize != null, 'must be has a font size.');
-    final defaultRubyTextStyle = effectiveTextStyle.merge(
-      TextStyle(fontSize: effectiveTextStyle.fontSize! / 1.5),
+    final defaultRubyTextStyle = effectiveTextStyle.copyWith(
+      fontSize: effectiveTextStyle.fontSize! / 1.5,
     );
 
     // ruby text style
-    var effectiveRubyTextStyle = widget.data.rubyStyle;
+    var effectiveRubyTextStyle = widget.rubyStyle;
     if (effectiveRubyTextStyle == null || effectiveRubyTextStyle.inherit) {
       effectiveRubyTextStyle =
           defaultRubyTextStyle.merge(effectiveRubyTextStyle);
     }
     if (boldTextOverride) {
-      effectiveRubyTextStyle = effectiveRubyTextStyle
-          .merge(const TextStyle(fontWeight: FontWeight.bold));
+      effectiveRubyTextStyle = effectiveRubyTextStyle.copyWith(
+        fontWeight: FontWeight.bold,
+      );
     }
 
     // spacing
-    final ruby = widget.data.ruby;
-    final text = widget.data.text;
+    final ruby = widget.ruby;
+    final text = widget.text ?? "";
     if (ruby != null &&
         effectiveTextStyle.letterSpacing == null &&
         effectiveRubyTextStyle.letterSpacing == null &&
@@ -156,24 +131,24 @@ class _RubyState extends State<_RubySpan> {
       final rubyWidth = _measurementWidth(
         ruby,
         effectiveRubyTextStyle,
-        textDirection:
-            widget.data.textDirection ?? textDirection ?? TextDirection.ltr,
+        widget.textDirection ?? textDirection ?? TextDirection.ltr,
       );
       final textWidth = _measurementWidth(
         text,
         effectiveTextStyle,
-        textDirection:
-            widget.data.textDirection ?? textDirection ?? TextDirection.ltr,
+        widget.textDirection ?? textDirection ?? TextDirection.ltr,
       );
 
       if (textWidth > rubyWidth) {
         final newLetterSpacing = (textWidth - rubyWidth) / ruby.length;
-        effectiveRubyTextStyle = effectiveRubyTextStyle
-            .merge(TextStyle(letterSpacing: newLetterSpacing));
+        effectiveRubyTextStyle = effectiveRubyTextStyle.copyWith(
+          letterSpacing: newLetterSpacing,
+        );
       } else {
         final newLetterSpacing = (rubyWidth - textWidth) / text.length;
-        effectiveTextStyle = effectiveTextStyle
-            .merge(TextStyle(letterSpacing: newLetterSpacing));
+        effectiveTextStyle = effectiveTextStyle.copyWith(
+          letterSpacing: newLetterSpacing,
+        );
       }
     }
 
@@ -186,9 +161,9 @@ class _RubyState extends State<_RubySpan> {
 
 double _measurementWidth(
   String text,
-  TextStyle style, {
-  TextDirection textDirection = TextDirection.ltr,
-}) {
+  TextStyle style,
+  TextDirection textDirection,
+) {
   final textPainter = TextPainter(
     text: TextSpan(text: text, style: style),
     textDirection: textDirection,
