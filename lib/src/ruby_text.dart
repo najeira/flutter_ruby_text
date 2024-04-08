@@ -121,11 +121,10 @@ class _RubyState extends State<_RubySpan> {
     }
 
     // spacing
-    final ruby = widget.ruby;
+    final ruby = widget.ruby ?? "";
     final text = widget.text ?? "";
-    if (ruby != null &&
-        effectiveTextStyle.letterSpacing == null &&
-        effectiveRubyTextStyle.letterSpacing == null &&
+    if (widget.style?.letterSpacing == null &&
+        widget.rubyStyle?.letterSpacing == null &&
         ruby.length >= 2 &&
         text.length >= 2) {
       final rubyWidth = _measurementWidth(
