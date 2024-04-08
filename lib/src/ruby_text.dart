@@ -31,13 +31,19 @@ class RubyText extends StatelessWidget {
         TextSpan(
           children: [
             for (final cell in data)
-              RubyTextSpan(
-                cell.copyWith(
+              if (cell.ruby?.isNotEmpty == true)
+                RubyTextSpan(
+                  cell.copyWith(
+                    style: style,
+                    rubyStyle: rubyStyle,
+                    textDirection: textDirection,
+                  ),
+                )
+              else
+                TextSpan(
+                  text: cell.text,
                   style: style,
-                  rubyStyle: rubyStyle,
-                  textDirection: textDirection,
                 ),
-              ),
           ],
         ),
         textAlign: textAlign,
@@ -88,6 +94,9 @@ class _RubyState extends State<_RubySpan> {
             widget.data.ruby!,
             textAlign: TextAlign.center,
             style: _rubyTextStyle,
+            textHeightBehavior: const TextHeightBehavior(
+              applyHeightToLastDescent: false,
+            ),
           ),
         Text(
           widget.data.text,
@@ -168,7 +177,9 @@ class _RubyState extends State<_RubySpan> {
       }
     }
 
-    _textStyle = effectiveTextStyle;
+    _textStyle = effectiveTextStyle.copyWith(
+      height: 1.2,
+    );
     _rubyTextStyle = effectiveRubyTextStyle;
   }
 }
