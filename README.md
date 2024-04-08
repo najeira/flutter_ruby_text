@@ -1,6 +1,6 @@
 # ruby_text
 
-A ruby text widget for Flutter.
+A ruby text for Flutter.
 
 ![](./screenshot.png)
 
@@ -16,36 +16,44 @@ dependencies:
 ## Example
 
 ```dart
-RubyText(
-  [
-    RubyTextData(
-      '夏',
-      ruby: 'なつ',
-    ),
-    RubyTextData(
-      'でも',
-    ),
-    RubyTextData(
-      '底',
-      ruby: 'そこ',
-    ),
-    RubyTextData(
-      'に',
-    ),
-    RubyTextData(
-      '冷',
-      ruby: 'つめ',
-    ),
-    RubyTextData(
-      'たさをもつ',
-    ),
-    RubyTextData(
-      '青',
-      ruby: 'あお',
-    ),
-    RubyTextData(
-      'いそら',
-    ),
-  ],
+Text.rich(
+  TextSpan(
+    children: [
+      RubyTextSpan(
+        text: '夏',
+        ruby: 'なつ',
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      ),
+      TextSpan(
+        text: 'でも',
+      ),
+      RubyTextSpan(
+        text: '底',
+        ruby: 'そこ',
+      ),
+      TextSpan(
+        text: 'に',
+      ),
+      RubyTextSpan(
+        text: '冷',
+        ruby: 'つめ',
+        style: TextStyle(
+          color: Colors.blue,
+        ),
+      ),
+      TextSpan(
+        text: 'たさをもつ',
+      ),
+      RubyTextSpan(
+        text: '青',
+        ruby: 'あお',
+      ),
+      TextSpan(
+        text: 'いそら',
+      ),
+    ],
+  ),
 );
 ```
